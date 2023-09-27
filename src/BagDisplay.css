@@ -1,0 +1,28 @@
+/* src/components/BagDisplay.css */
+.bag-container {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .search-container {
+    margin: 20px 0;
+  }
+  
+  .error {
+    color: red;
+    font-weight: bold;
+  }
+  
+  .bag-list {
+    margin-top: 20px;
+  }
+  
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  li {
+    margin: 10px 0;
+  }
+  
