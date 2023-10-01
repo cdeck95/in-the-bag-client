@@ -1,6 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { SetStateAction, useEffect, useState } from 'react';
 import './BagDisplay.css';
 import Axios from 'axios';
+import { Paper, InputBase, Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Typography } from '@mui/material';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import SearchIcon from '@mui/icons-material/Search';
+import FilterListOutlinedIcon from '@mui/icons-material/FilterListOutlined';
+
 
 interface Disc {
   id: number;
@@ -87,6 +93,14 @@ const BagDisplay: React.FC = () => {
       [category]: !prevExpandedCategories[category],
     }));
   };
+
+  const handleSearch = (e: {
+    preventDefault: () => void;
+    target: { value: SetStateAction<string> };
+  }) => {
+    e.preventDefault();
+    setUserId(e.target.value);
+  };
   
 
   useEffect(() => {
@@ -97,12 +111,24 @@ const BagDisplay: React.FC = () => {
     <div className="bag-container">
       <h1>Disc Golf Bag</h1>
       <div className="search-container">
-        <input
-          type="text"
-          placeholder="Enter User ID"
-          value={userId}
-          onChange={(e) => setUserId(e.target.value)}
-        />
+        <Paper
+              component="form"
+              sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 400 }}
+            >
+              {/* <IconButton sx={{ p: '10px' }} aria-label="menu" onClick={handleClickPopover}>
+                <FilterListOutlinedIcon/>
+              </IconButton> */}
+              <InputBase
+                sx={{ ml: 1, flex: 1 }}
+                placeholder="Search for Ted, Teddy or AI Token ID"
+                inputProps={{ 'aria-label': 'Search for Ted, Teddy or AI Token ID' }}
+                onChange={handleSearch}
+                value={userId}
+              />
+              <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
+                <SearchIcon />
+              </IconButton>
+            </Paper>
         <button onClick={searchBag}>Search</button>
         <button onClick={collapseAll}>Collapse All</button>
         <button onClick={expandAll}>Expand All</button>
@@ -121,14 +147,22 @@ const BagDisplay: React.FC = () => {
           {expandedCategories[category] && (
             <ul>
               {discs.map((disc: Disc, index: number) => (
-                <li key={index}>
-                  <div className="disc-item">
+                <Card sx={{ maxWidth: 345 }} key={index}>
+                <CardActionArea>
+                  <CardMedia
+                    component="img"
+                    height="140"
+                    image="/static/images/cards/contemplative-reptile.jpg"
+                    alt="green iguana"
+                  />
                   <button onClick={() => toggleDisc(disc.id)} className="toggle-button">
                     {expandedDiscs[disc.id] ? '-' : '+'}
                   </button>
-                    {disc.disc_name}
-                  </div>
-                  {expandedDiscs[disc.id] && (
+                  <CardContent>
+                    <Typography gutterBottom variant="h5" component="div">
+                      {disc.disc_name}
+                    </Typography>
+                    {expandedDiscs[disc.id] && (
                     <table>
                       <tbody>
                         <tr>
@@ -154,7 +188,14 @@ const BagDisplay: React.FC = () => {
                       </tbody>
                     </table>
                   )}
-                </li>
+                  </CardContent>
+                </CardActionArea>
+                <CardActions>
+                  <Button size="small" color="primary">
+                    Share
+                  </Button>
+                </CardActions>
+              </Card>
               ))}
               </ul>
             )}
